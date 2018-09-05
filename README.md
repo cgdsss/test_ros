@@ -27,4 +27,4 @@ http://note.youdao.com/noteshare?id=61f18c56246c34475a7ccdb88620934e
   
   ```rosservice call /scan_server "flag: 30"```
   
-- Change the value of parameter a and b in [yaml file](https://github.com/cgdsss/test_ros/blob/master/cfg/params.yaml).
+- Change the value of parameter a and b in [yaml file](https://github.com/cgdsss/test_ros/blob/master/cfg/params.yaml). Then test it again.
