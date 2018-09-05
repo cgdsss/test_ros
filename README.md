@@ -14,15 +14,15 @@
 - launch cpp node
 
   ```
-      roslaunch test_ros node.launch
+  roslaunch test_ros node.launch
   ```
 - run python node
   ```
-     roscd test_ros
-     chmod +x ./scripts/test.py
+  roscd test_ros
+  chmod +x ./scripts/test.py
   ```
   ```
-     rosrun test_ros test.py
+  rosrun test_ros test.py
   ```
 - launch rviz
 
