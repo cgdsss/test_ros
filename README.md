@@ -26,7 +26,9 @@
   ```
 - launch rviz
 
-  ```roslaunch test_ros rviz.launch```
+  ```
+  roslaunch test_ros rviz.launch
+  ```
 - Call service request at terminal
 
     ```rosservice call /scan_server "flag: -1"```
