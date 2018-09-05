@@ -2,6 +2,8 @@
 #include <sensor_msgs/LaserScan.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <boost/thread.hpp>
+#include <test_ros/GetObstacles.h>
+#include <geometry_msgs/PointStamped.h>
 
 template<class T>
 class Point2
@@ -53,6 +55,9 @@ private:
     void publishObstacles(std::vector<Point2f> &obstacles);
 
     ros::ServiceServer laser_service_;
+    bool laserSrvCallback(test_ros::GetObstacles::Request  &req,
+                     test_ros::GetObstacles::Response &res );
+    bool getNearestObstacle(RosLaserData& laser, Point2f &point);
 
     boost::thread* obstacle_thread_;
     void obstacleloop();

@@ -1,0 +1,3 @@
+int64 flag
+---
+geometry_msgs/PointStamped[] obstacles
