@@ -38,6 +38,9 @@ private:
     void laserCallback(const sensor_msgs::LaserScanConstPtr laser_msg);
 
     ros::Publisher markers_publisher_;
-
     ros::ServiceServer laser_service_;
+
+    boost::thread* obstacle_thread_;
+    void obstacleloop();
+    bool is_run_;
 };

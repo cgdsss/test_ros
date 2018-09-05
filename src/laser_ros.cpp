@@ -10,6 +10,9 @@ LaserRos::LaserRos()
 
     laser_subscriber_ = nh_.subscribe("/scan", 1, &LaserRos::laserCallback, this);
     markers_publisher_ = nh_.advertise<visualization_msgs::MarkerArray>("/scan_filter", 1);
+
+    obstacle_thread_ = new boost::thread(boost::bind(&LaserRos::obstacleloop, this));
+    is_run_ = true;
 }
 
 LaserRos::~LaserRos()
@@ -21,6 +24,8 @@ LaserRos::~LaserRos()
     }
     delete[] laser_buffer_;
     std::cout << "Free laser buffer" << std::endl;
+    is_run_ = false;
+    delete obstacle_thread_;
 }
 
 void LaserRos::laserCallback(const sensor_msgs::LaserScanConstPtr laser_msg)
@@ -40,4 +45,16 @@ void LaserRos::laserCallback(const sensor_msgs::LaserScanConstPtr laser_msg)
     for (int i = 0; i < laser_num_; i++)
         laserData.data[i] = laser_msg->ranges[i];
     laserBufferMutex.unlock();
+}
+
+void LaserRos::obstacleloop()
+{
+    ros::Rate r(20);
+    while(is_run_)
+    {
+        laserBufferMutex.lock();
+        ROS_INFO("run thread");
+        laserBufferMutex.unlock();
+        r.sleep();
+    }
 }
