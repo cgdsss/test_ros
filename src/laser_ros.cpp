@@ -1,4 +1,5 @@
 #include "laser_ros.h"
+#include <math.h>
 
 LaserRos::LaserRos()
 {
@@ -35,6 +36,7 @@ void LaserRos::laserCallback(const sensor_msgs::LaserScanConstPtr laser_msg)
     laser_angle_increment_ = laser_msg->angle_increment;
     laser_angle_min_ = laser_msg->angle_min;
     laser_angle_max_ = laser_msg->angle_max;
+    laser_link_ = laser_msg->header.frame_id;
     curLaserBufferIndex = (curLaserBufferIndex + 1) % LaserBufferLen;
     ROS_INFO("%d", curLaserBufferIndex);
     RosLaserData & laserData = laser_buffer_[curLaserBufferIndex];
@@ -52,9 +54,63 @@ void LaserRos::obstacleloop()
     ros::Rate r(20);
     while(is_run_)
     {
-        laserBufferMutex.lock();
-        ROS_INFO("run thread");
-        laserBufferMutex.unlock();
-        r.sleep();
+        if (curLaserBufferIndex != -1)
+        {
+            obstacles_.clear();
+            laserBufferMutex.lock();
+            ROS_INFO("run thread");
+            RosLaserData & laserData = laser_buffer_[curLaserBufferIndex];
+            for (int i = 0; i < laser_num_; i++)
+            {
+                double theta = laser_angle_min_ + laser_angle_increment_ * i;
+                double r = laserData.data[i];
+                double x = r * cos(theta);
+                double y = r * sin(theta);
+                if (a_ > fabs(x) && b_ > fabs(y))
+                {
+                    Point2f tmp(x, y);
+                    obstacles_.push_back(tmp);
+                }
+            }
+            laserBufferMutex.unlock();
+            std::cout << obstacles_.size() << std::endl;
+            publishObstacles(obstacles_);
+            r.sleep();
+        }
     }
+}
+
+void LaserRos::publishObstacles(std::vector<Point2f> &obstacles)
+{
+    visualization_msgs::MarkerArray marker_array;
+    marker_array.markers.clear();
+    int id = 0;
+    visualization_msgs::Marker marker;
+    marker.header.frame_id = laser_link_;
+    marker.header.stamp = ros::Time::now();
+    marker.color.a = 1;
+    marker.color.r = 0;
+    marker.color.g = 0;
+    marker.color.b = 1;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.z = 0;
+    marker.pose.orientation.w = 1;
+    marker.pose.orientation.x = 0;
+    marker.pose.orientation.y = 0;
+    marker.pose.orientation.z = 0;
+    marker.ns = "obstacle";
+    marker.type = visualization_msgs::Marker::SPHERE;
+    marker.scale.x = 0.05;
+    marker.scale.y = 0.05;
+    marker.scale.z = 0.05;
+    for (std::vector<Point2f>::iterator it = obstacles.begin(); it != obstacles.end(); it++)
+    {
+
+        marker.pose.position.x = it->x;
+        marker.pose.position.y = it->y;
+        marker.id = id;
+        marker_array.markers.push_back(marker);
+        id ++;
+    }
+    markers_publisher_.publish(marker_array);
 }

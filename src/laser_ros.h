@@ -3,6 +3,17 @@
 #include <visualization_msgs/MarkerArray.h>
 #include <boost/thread.hpp>
 
+template<class T>
+class Point2
+{
+public:
+    Point2(){}
+    Point2(T a, T b){x = a; y = b;}
+    T x;
+    T y;
+};
+typedef Point2<float> Point2f;
+
 class RosLaserData
 {
 public:
@@ -32,15 +43,19 @@ private:
     float laser_angle_max_;
     float laser_angle_increment_;
     int laser_num_;
+    std::string laser_link_;
     const static int LaserBufferLen = 20;
 
     ros::Subscriber laser_subscriber_;
     void laserCallback(const sensor_msgs::LaserScanConstPtr laser_msg);
 
     ros::Publisher markers_publisher_;
+    void publishObstacles(std::vector<Point2f> &obstacles);
+
     ros::ServiceServer laser_service_;
 
     boost::thread* obstacle_thread_;
     void obstacleloop();
     bool is_run_;
+    std::vector<Point2f> obstacles_;
 };
