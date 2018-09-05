@@ -16,6 +16,7 @@ LaserRos::LaserRos()
 
     obstacle_thread_ = new boost::thread(boost::bind(&LaserRos::obstacleloop, this));
     is_run_ = true;
+    ROS_INFO("a: %f, b: %f", a_, b_);
     ROS_INFO("Everything is ready.");
 }
 
