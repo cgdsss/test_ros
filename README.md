@@ -2,6 +2,11 @@
 ### Assignment Requirements
 
 http://note.youdao.com/noteshare?id=61f18c56246c34475a7ccdb88620934e
+### Build
+   ```bash
+   cd ~/catkin_ws
+   catkin_make --only-pkg-with-deps test_ros
+   ```
 ### Test
 - launch gazebo simulator
 
@@ -11,7 +16,7 @@ http://note.youdao.com/noteshare?id=61f18c56246c34475a7ccdb88620934e
   ```roslaunch test_ros node.launch```
 - launch rviz
 
-  ```rviz```
+  ```roslaunch test_ros rviz.launch```
 - Call service request at terminal
 
   ```rosservice call /scan_server "flag: -1"```
