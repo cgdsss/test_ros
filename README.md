@@ -10,7 +10,7 @@
 ### Test
 - launch gazebo simulator
 
-     https://gitee.com/cgdsss/kejia_sim
+     https://github.com/cgdsss/kejia_simulator
 - launch cpp node
 
   ```
