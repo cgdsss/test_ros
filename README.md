@@ -1,7 +1,9 @@
 # test_ros
+### Slide
+    http://note.youdao.com/noteshare?id=d0e59060b660af82c3c4fd46efeb13bf
 ### Assignment Requirements
 
-   http://note.youdao.com/noteshare?id=61f18c56246c34475a7ccdb88620934e
+    http://note.youdao.com/noteshare?id=61f18c56246c34475a7ccdb88620934e
 ### Build
    ```bash
       cd ~/catkin_ws
